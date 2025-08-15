@@ -1,0 +1,8 @@
+flutter_native_splash:
+  color: "#ffffff"
+  image: assets/images/safe_blood.png
+  web: false
+  android: true
+  ios: true
+  branding: assets/images/hospital.png
+    

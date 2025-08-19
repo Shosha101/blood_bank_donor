@@ -1,49 +1,24 @@
+// import 'package:blood_bank_donor/core/networking/api_result.dart';
+// import 'package:blood_bank_donor/features/login/data/repo/login_repo.dart';
+// import 'package:flutter_bloc/flutter_bloc.dart';
+// import 'package:freezed_annotation/freezed_annotation.dart';
 
-import 'package:blood_bank_donor/features/login/data/repo/login_repo.dart';
-import 'package:blood_bank_donor/features/login/logic/login_state.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+// part 'login_state.freezed.dart';
 
-class LoginCubit extends Cubit<LoginState> {
-  final LoginRepo _loginRepo;
-  LoginCubit(this._loginRepo) : super(const LoginState.initial());
+// @freezed
+// class LoginState with _$LoginState {
+//   const factory LoginState.initial() = _Initial;
+//   const factory LoginState.loading() = _Loading;
+//   const factory LoginState.success(int donorId) = _Success;
+//   const factory LoginState.error(String message) = _Error;
+// }
 
-  // List<SpecializationsData?>? specializationsList = [];
+// class LoginCubit extends Cubit<LoginState> {
 
-  // void getSpecializations() async {
-  //   emit(const HomeState.specializationsLoading());
-  //   final response = await _homeRepo.getSpecialization();
-  //   response.when(
-  //     success: (specializationsResponseModel) {
-  //       specializationsList =
-  //           specializationsResponseModel.specializationDataList ?? [];
+//   LoginCubit(this._loginRepo) : super(const LoginState.initial());
 
-  //       // getting the doctors list for the first specialization by default.
-  //       getDoctorsList(specializationId: specializationsList?.first?.id);
-
-  //       emit(HomeState.specializationsSuccess(
-  //           specializationsResponseModel.specializationDataList));
-  //     },
-  //     failure: (errorHandler) {
-  //       emit(HomeState.specializationsError(errorHandler));
-  //     },
-  //   );
-  // }
-
-  // void getDoctorsList({required int? specializationId}) {
-  //   List<Doctors?>? doctorsList =
-  //       getDoctorsListBySpecializationId(specializationId);
-
-  //   if (!doctorsList.isNullOrEmpty()) {
-  //     emit(HomeState.doctorsSuccess(doctorsList));
-  //   } else {
-  //     emit(HomeState.doctorsError(ErrorHandler.handle('No doctors found')));
-  //   }
-  // }
-
-  // /// returns the list of doctors based on the specialization id
-  // getDoctorsListBySpecializationId(specializationId) {
-  //   return specializationsList
-  //       ?.firstWhere((specialization) => specialization?.id == specializationId)
-  //       ?.doctorsList;
-  // }
-}
+//   Future<void> login(String phoneNumber) async {
+//     if (isClosed) return;
+//     emit(const LoginState.loading());
+//   }
+// }

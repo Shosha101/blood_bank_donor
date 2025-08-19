@@ -1,49 +1,38 @@
-
+import 'package:blood_bank_donor/core/networking/api_result.dart';
 import 'package:blood_bank_donor/features/requests/data/repo/requests_repo.dart';
 import 'package:blood_bank_donor/features/requests/logic/requests_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class RequestsCubit extends Cubit<RequestsState> {
   final RequestsRepo _requestsRepo;
-  RequestsCubit(this._requestsRepo) : super(const RequestsState.initial());
+  final int donorId;
 
-  // List<SpecializationsData?>? specializationsList = [];
+  RequestsCubit(this._requestsRepo, {this.donorId = 1}) : super(const RequestsState.initial());
 
-  // void getSpecializations() async {
-  //   emit(const HomeState.specializationsLoading());
-  //   final response = await _homeRepo.getSpecialization();
-  //   response.when(
-  //     success: (specializationsResponseModel) {
-  //       specializationsList =
-  //           specializationsResponseModel.specializationDataList ?? [];
+  void getDonationRequests() async {
+    emit(const RequestsState.loading());
+    final result = await _requestsRepo.getDonationRequests(donorId);
+    result.when(
+      success: (requests) => emit(RequestsState.success(requests)),
+      failure: (error) => emit(RequestsState.error(error)),
+    );
+  }
 
-  //       // getting the doctors list for the first specialization by default.
-  //       getDoctorsList(specializationId: specializationsList?.first?.id);
+  void approveDonationRequest(int requestId) async {
+    emit(const RequestsState.loading());
+    final result = await _requestsRepo.approveDonationRequest(requestId);
+    result.when(
+      success: (_) => getDonationRequests(),
+      failure: (error) => emit(RequestsState.error(error)),
+    );
+  }
 
-  //       emit(HomeState.specializationsSuccess(
-  //           specializationsResponseModel.specializationDataList));
-  //     },
-  //     failure: (errorHandler) {
-  //       emit(HomeState.specializationsError(errorHandler));
-  //     },
-  //   );
-  // }
-
-  // void getDoctorsList({required int? specializationId}) {
-  //   List<Doctors?>? doctorsList =
-  //       getDoctorsListBySpecializationId(specializationId);
-
-  //   if (!doctorsList.isNullOrEmpty()) {
-  //     emit(HomeState.doctorsSuccess(doctorsList));
-  //   } else {
-  //     emit(HomeState.doctorsError(ErrorHandler.handle('No doctors found')));
-  //   }
-  // }
-
-  // /// returns the list of doctors based on the specialization id
-  // getDoctorsListBySpecializationId(specializationId) {
-  //   return specializationsList
-  //       ?.firstWhere((specialization) => specialization?.id == specializationId)
-  //       ?.doctorsList;
-  // }
+  void rejectDonationRequest(int requestId) async {
+    emit(const RequestsState.loading());
+    final result = await _requestsRepo.rejectDonationRequest(requestId);
+    result.when(
+      success: (_) => getDonationRequests(),
+      failure: (error) => emit(RequestsState.error(error)),
+    );
+  }
 }

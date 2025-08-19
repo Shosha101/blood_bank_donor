@@ -10,7 +10,7 @@ part of 'about_api_service.dart';
 
 class _AboutApiService implements AboutApiService {
   _AboutApiService(this._dio, {this.baseUrl, this.errorLogger}) {
-    baseUrl ??= 'https://vcare.integration25.com/api/';
+    baseUrl ??= 'http://hemolink.runasp.net/api/';
   }
 
   final Dio _dio;

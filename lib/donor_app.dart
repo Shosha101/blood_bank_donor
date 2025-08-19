@@ -19,6 +19,7 @@ class DonorApp extends StatelessWidget {
           title: 'Blood Bank Donor',
           theme: ThemeData(
             primarySwatch: Colors.red,
+            scaffoldBackgroundColor: Colors.white,
           ),
           initialRoute: Routes.initialRoute,
           onGenerateRoute: appRouter.generateRoute,

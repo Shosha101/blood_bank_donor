@@ -115,51 +115,54 @@ class _AboutScreenState extends State<AboutScreen> {
                         ),
                       ),
                       SizedBox(height: 20.h),
-                      Card(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8.r),
-                        ),
-                        elevation: 4,
-                        child: Padding(
-                          padding: EdgeInsets.all(16.w),
-                          child: Column(
-                            children: [
-                              buildDetailRow(
-                                Icons.phone,
-                                "Phone",
-                                donor.phoneNumber,
-                              ),
-                              buildDetailRow(
-                                Icons.credit_card,
-                                "SSN",
-                                donor.ssn,
-                              ),
-                              buildDetailRow(
-                                Icons.cake,
-                                "Date of Birth",
-                                donor.dateOfBirth.substring(0, 10),
-                              ),
-                              buildDetailRow(
-                                Icons.person,
-                                "Gender",
-                                donor.gender,
-                              ),
-                              buildDetailRow(
-                                Icons.bloodtype,
-                                "Blood Type",
-                                donor.bloodTypeName,
-                              ),
-                              buildDetailRow(
-                                Icons.location_on,
-                                "Area",
-                                donor.areaName,
-                              ),
-                              buildDetailRow(
-                                Icons.star,
-                                "Points",
-                                donor.totalPoints.toString(),
-                              ),
-                            ],
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 250.w),
+                        child: Card(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8.r),
+                          ),
+                          elevation: 4,
+                          child: Padding(
+                            padding: EdgeInsets.all(16.w),
+                            child: Column(
+                              children: [
+                                buildDetailRow(
+                                  Icons.phone,
+                                  "Phone",
+                                  donor.phoneNumber,
+                                ),
+                                buildDetailRow(
+                                  Icons.credit_card,
+                                  "SSN",
+                                  donor.ssn,
+                                ),
+                                buildDetailRow(
+                                  Icons.cake,
+                                  "Date of Birth",
+                                  donor.dateOfBirth.substring(0, 10),
+                                ),
+                                buildDetailRow(
+                                  Icons.person,
+                                  "Gender",
+                                  donor.gender,
+                                ),
+                                buildDetailRow(
+                                  Icons.bloodtype,
+                                  "Blood Type",
+                                  donor.bloodTypeName,
+                                ),
+                                buildDetailRow(
+                                  Icons.location_on,
+                                  "Area",
+                                  donor.areaName,
+                                ),
+                                buildDetailRow(
+                                  Icons.star,
+                                  "Points",
+                                  donor.totalPoints.toString(),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       ),

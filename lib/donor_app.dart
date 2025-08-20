@@ -11,7 +11,7 @@ class DonorApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ScreenUtilInit(
-      designSize: const Size(360, 690),
+      designSize: const Size(1280, 809),
       minTextAdapt: true,
       splitScreenMode: true,
       builder: (context, child) {

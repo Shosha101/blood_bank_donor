@@ -20,7 +20,7 @@ class _RequestsApiService implements RequestsApiService {
   final ParseErrorLogger? errorLogger;
 
   @override
-  Future<List<RequestModel>> getDonationRequests(int donorId) async {
+  Future<List<RequestModel>> getDonationRequests() async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
@@ -29,7 +29,7 @@ class _RequestsApiService implements RequestsApiService {
       Options(method: 'GET', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            'DonationRequest/donor/${donorId}',
+            'DonationRequest/donor/1',
             queryParameters: queryParameters,
             data: _data,
           )

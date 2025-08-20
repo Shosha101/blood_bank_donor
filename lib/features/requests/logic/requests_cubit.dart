@@ -5,13 +5,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class RequestsCubit extends Cubit<RequestsState> {
   final RequestsRepo _requestsRepo;
-  final int donorId;
 
-  RequestsCubit(this._requestsRepo, {this.donorId = 1}) : super(const RequestsState.initial());
+  RequestsCubit(this._requestsRepo) : super(const RequestsState.initial());
 
   void getDonationRequests() async {
     emit(const RequestsState.loading());
-    final result = await _requestsRepo.getDonationRequests(donorId);
+    final result = await _requestsRepo.getDonationRequests();
     result.when(
       success: (requests) => emit(RequestsState.success(requests)),
       failure: (error) => emit(RequestsState.error(error)),

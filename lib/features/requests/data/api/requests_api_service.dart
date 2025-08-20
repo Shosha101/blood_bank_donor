@@ -9,8 +9,8 @@ part 'requests_api_service.g.dart';
 abstract class RequestsApiService {
   factory RequestsApiService(Dio dio) = _RequestsApiService;
 
-  @GET('DonationRequest/donor/{donorId}')
-  Future<List<RequestModel>> getDonationRequests(@Path('donorId') int donorId);
+  @GET('DonationRequest/donor/1')
+  Future<List<RequestModel>> getDonationRequests();
 
   @PUT('DonationRequest/donor/{requestId}/approve')
   Future<void> approveDonationRequest(@Path('requestId') int requestId);

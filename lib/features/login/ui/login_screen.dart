@@ -20,7 +20,7 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Padding(
-        padding: EdgeInsets.all(16.0.w),
+        padding: EdgeInsets.symmetric(horizontal: 400.w),
         child: Form(
           key: _formKey,
           child: Column(
@@ -73,9 +73,9 @@ class _LoginScreenState extends State<LoginScreen> {
                       try {
                         widget.onLogin(context, _phoneController.text);
                       } catch (e) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text('Error: $e')),
-                        );
+                        ScaffoldMessenger.of(
+                          context,
+                        ).showSnackBar(SnackBar(content: Text('Error: $e')));
                       }
                     }
                   },

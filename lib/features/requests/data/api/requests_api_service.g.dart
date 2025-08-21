@@ -10,7 +10,7 @@ part of 'requests_api_service.dart';
 
 class _RequestsApiService implements RequestsApiService {
   _RequestsApiService(this._dio, {this.baseUrl, this.errorLogger}) {
-    baseUrl ??= 'http://hemolink.runasp.net/api/';
+    baseUrl ??= 'https://hemolink.runasp.net/api/';
   }
 
   final Dio _dio;
@@ -29,7 +29,7 @@ class _RequestsApiService implements RequestsApiService {
       Options(method: 'GET', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            'DonationRequest/donor/1',
+            'DonationRequest/donor',
             queryParameters: queryParameters,
             data: _data,
           )

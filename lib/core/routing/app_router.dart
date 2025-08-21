@@ -1,11 +1,12 @@
 import 'package:blood_bank_donor/core/di/dependency_injection.dart';
 import 'package:blood_bank_donor/core/routing/routes.dart';
 import 'package:blood_bank_donor/features/about/logic/donor_cubit.dart';
-import 'package:blood_bank_donor/main_screen.dart';
+import 'package:blood_bank_donor/features/about/ui/about_screen.dart';
+import 'package:blood_bank_donor/features/login/logic/login_cubit.dart';
+import 'package:blood_bank_donor/features/login/ui/login_screen.dart';
 import 'package:blood_bank_donor/features/requests/logic/requests_cubit.dart';
 import 'package:blood_bank_donor/features/requests/ui/requests_screen.dart';
-import 'package:blood_bank_donor/features/about/ui/about_screen.dart';
-import 'package:blood_bank_donor/features/login/ui/login_screen.dart';
+import 'package:blood_bank_donor/main_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -16,25 +17,28 @@ class AppRouter {
     switch (settings.name) {
       case Routes.initialRoute:
         return MaterialPageRoute(
-          builder: (context) => LoginScreen(
-            onLogin: (context, phone) {
-              try {
-                Navigator.pushReplacementNamed(
-                  context,
-                  Routes.mainScreen,
-                  arguments: phone,
-                );
-              } catch (e, stackTrace) {
-                debugPrint('Error navigating to MainScreen: $e\n$stackTrace');
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text('Navigation failed: $e'),
-                    backgroundColor: Colors.red,
-                    duration: const Duration(seconds: 2),
-                  ),
-                );
-              }
-            },
+          builder: (context) => BlocProvider.value(
+            value: getIt<LoginCubit>(),
+            child: LoginScreen(
+              onLogin: (context, phone) {
+                try {
+                  Navigator.pushReplacementNamed(
+                    context,
+                    Routes.mainScreen,
+                    arguments: phone,
+                  );
+                } catch (e, stackTrace) {
+                  debugPrint('Error navigating to MainScreen: $e\n$stackTrace');
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('Navigation failed: $e'),
+                      backgroundColor: Colors.red,
+                      duration: const Duration(seconds: 2),
+                    ),
+                  );
+                }
+              },
+            ),
           ),
         );
       case Routes.mainScreen:

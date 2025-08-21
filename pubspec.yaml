@@ -9,55 +9,39 @@ environment:
   sdk: ^3.8.1
 
 dependencies:
+  cached_network_image: ^3.4.1
+  cupertino_icons: ^1.0.8
+  dio: ^5.9.0
+  dio_cookie_manager: ^3.3.0
+  dropdown_button2: ^2.3.9
+  easy_localization: ^3.0.8
+  easy_sidemenu: ^0.7.1
   flutter:
     sdk: flutter
-
-  # UI & Icons
-  cupertino_icons: ^1.0.8
-  flutter_screenutil: ^5.9.3
-  flutter_svg: ^2.2.0
-  hexcolor: ^3.0.1
-  shimmer: ^3.0.0
-
-  # State Management & DI
   flutter_bloc: ^9.1.1
-  get_it: ^8.2.0
-
-  # Networking
-  dio: ^5.9.0
-  retrofit: ^4.7.1
-  pretty_dio_logger: ^1.4.0
-
-  # Storage
+  flutter_screenutil: ^5.9.3
   flutter_secure_storage: ^9.2.4
-  shared_preferences: ^2.5.3
-
-  # Localization
-  easy_localization: ^3.0.8
-
-  # Widgets & UI Helpers
-  cached_network_image: ^3.4.1
-  dropdown_button2: ^2.3.9
-  group_dropdown_button: ^1.0.4
-  easy_sidemenu: ^0.7.1
-  sidebarx: ^0.17.2
-
-  # Data Formatting
-  intl: ^0.20.2
-
-  # Assets Annotation & Serialization
+  flutter_svg: ^2.2.0
   freezed_annotation: ^3.1.0
+  get_it: ^8.2.0
+  group_dropdown_button: ^1.0.4
+  hexcolor: ^3.0.1
+  intl: ^0.20.2
   json_annotation: ^4.9.0
-
+  pretty_dio_logger: ^1.4.0
+  retrofit: ^4.7.1
+  shared_preferences: ^2.5.3
+  shimmer: ^3.0.0
+  sidebarx: ^0.17.2
 dev_dependencies:
-  flutter_lints: ^5.0.0
   build_runner: ^2.6.0
-  freezed: ^3.2.0
-  json_serializable: ^6.10.0
-  retrofit_generator: ^10.0.2
+  flutter_lints: ^5.0.0
   flutter_native_splash: ^2.4.6
   flutter_test: # ✅ Required for widget tests
     sdk: flutter
+  freezed: ^3.2.0
+  json_serializable: ^6.10.0
+  retrofit_generator: ^10.0.2
 
 flutter:
   uses-material-design: true

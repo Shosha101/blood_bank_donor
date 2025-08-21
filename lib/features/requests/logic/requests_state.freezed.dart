@@ -128,7 +128,7 @@ return error(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function()?  loading,TResult Function( List<RequestModel> requests)?  success,TResult Function( ApiErrorModel error)?  error,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function()?  loading,TResult Function( List<RequestModel> requests)?  success,TResult Function( ErrorHandler error)?  error,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Initial() when initial != null:
 return initial();case RequestsStateLoading() when loading != null:
@@ -152,7 +152,7 @@ return error(_that.error);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function()  loading,required TResult Function( List<RequestModel> requests)  success,required TResult Function( ApiErrorModel error)  error,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function()  loading,required TResult Function( List<RequestModel> requests)  success,required TResult Function( ErrorHandler error)  error,}) {final _that = this;
 switch (_that) {
 case _Initial():
 return initial();case RequestsStateLoading():
@@ -175,7 +175,7 @@ return error(_that.error);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function()?  loading,TResult? Function( List<RequestModel> requests)?  success,TResult? Function( ApiErrorModel error)?  error,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function()?  loading,TResult? Function( List<RequestModel> requests)?  success,TResult? Function( ErrorHandler error)?  error,}) {final _that = this;
 switch (_that) {
 case _Initial() when initial != null:
 return initial();case RequestsStateLoading() when loading != null:
@@ -332,7 +332,7 @@ class RequestsStateError implements RequestsState {
   const RequestsStateError(this.error);
   
 
- final  ApiErrorModel error;
+ final  ErrorHandler error;
 
 /// Create a copy of RequestsState
 /// with the given fields replaced by the non-null parameter values.
@@ -364,7 +364,7 @@ abstract mixin class $RequestsStateErrorCopyWith<$Res> implements $RequestsState
   factory $RequestsStateErrorCopyWith(RequestsStateError value, $Res Function(RequestsStateError) _then) = _$RequestsStateErrorCopyWithImpl;
 @useResult
 $Res call({
- ApiErrorModel error
+ ErrorHandler error
 });
 
 
@@ -384,7 +384,7 @@ class _$RequestsStateErrorCopyWithImpl<$Res>
 @pragma('vm:prefer-inline') $Res call({Object? error = null,}) {
   return _then(RequestsStateError(
 null == error ? _self.error : error // ignore: cast_nullable_to_non_nullable
-as ApiErrorModel,
+as ErrorHandler,
   ));
 }
 

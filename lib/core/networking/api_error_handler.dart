@@ -135,6 +135,7 @@ class ErrorHandler implements Exception {
       apiErrorModel = DataSource.DEFAULT.getFailure();
     }
   }
+
 }
 
 ApiErrorModel _handleError(DioException error) {

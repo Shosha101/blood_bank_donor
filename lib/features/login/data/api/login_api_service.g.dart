@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'donor_api_service.dart';
+part of 'login_api_service.dart';
 
 // **************************************************************************
 // RetrofitGenerator
@@ -8,8 +8,8 @@ part of 'donor_api_service.dart';
 
 // ignore_for_file: unnecessary_brace_in_string_interps,no_leading_underscores_for_local_identifiers,unused_element,unnecessary_string_interpolations,unused_element_parameter
 
-class _DonorApiService implements DonorApiService {
-  _DonorApiService(this._dio, {this.baseUrl, this.errorLogger}) {
+class _LoginApiService implements LoginApiService {
+  _LoginApiService(this._dio, {this.baseUrl, this.errorLogger}) {
     baseUrl ??= 'https://hemolink.runasp.net/api/';
   }
 
@@ -20,25 +20,53 @@ class _DonorApiService implements DonorApiService {
   final ParseErrorLogger? errorLogger;
 
   @override
-  Future<DonorModel> getDonorData() async {
+  Future<LoginResponse> login(LoginRequestBody loginRequestBody) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
-    const Map<String, dynamic>? _data = null;
-    final _options = _setStreamType<DonorModel>(
-      Options(method: 'GET', headers: _headers, extra: _extra)
+    final _data = <String, dynamic>{};
+    _data.addAll(loginRequestBody.toJson());
+    final _options = _setStreamType<LoginResponse>(
+      Options(method: 'POST', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            'donor',
+            '/user/login',
             queryParameters: queryParameters,
             data: _data,
           )
           .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
     );
     final _result = await _dio.fetch<Map<String, dynamic>>(_options);
-    late DonorModel _value;
+    late LoginResponse _value;
     try {
-      _value = DonorModel.fromJson(_result.data!);
+      _value = LoginResponse.fromJson(_result.data!);
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
+    return _value;
+  }
+
+  @override
+  Future<LogoutResponse> logout() async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    const Map<String, dynamic>? _data = null;
+    final _options = _setStreamType<LogoutResponse>(
+      Options(method: 'POST', headers: _headers, extra: _extra)
+          .compose(
+            _dio.options,
+            '/user/logout',
+            queryParameters: queryParameters,
+            data: _data,
+          )
+          .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
+    );
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late LogoutResponse _value;
+    try {
+      _value = LogoutResponse.fromJson(_result.data!);
     } on Object catch (e, s) {
       errorLogger?.logError(e, s, _options);
       rethrow;

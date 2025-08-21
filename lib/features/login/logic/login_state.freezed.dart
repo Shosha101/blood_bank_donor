@@ -55,13 +55,15 @@ extension LoginStatePatterns on LoginState {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _Initial value)?  initial,TResult Function( LoginStateLoading value)?  hospitalsLoading,TResult Function( LoginStateError value)?  hospitalsError,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _Initial value)?  initial,TResult Function( LoginStateLoading value)?  loading,TResult Function( LoginStateSuccess value)?  success,TResult Function( LoginStateLogoutSuccess value)?  logoutSuccess,TResult Function( LoginStateError value)?  error,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
 case _Initial() when initial != null:
-return initial(_that);case LoginStateLoading() when hospitalsLoading != null:
-return hospitalsLoading(_that);case LoginStateError() when hospitalsError != null:
-return hospitalsError(_that);case _:
+return initial(_that);case LoginStateLoading() when loading != null:
+return loading(_that);case LoginStateSuccess() when success != null:
+return success(_that);case LoginStateLogoutSuccess() when logoutSuccess != null:
+return logoutSuccess(_that);case LoginStateError() when error != null:
+return error(_that);case _:
   return orElse();
 
 }
@@ -79,13 +81,15 @@ return hospitalsError(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _Initial value)  initial,required TResult Function( LoginStateLoading value)  hospitalsLoading,required TResult Function( LoginStateError value)  hospitalsError,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _Initial value)  initial,required TResult Function( LoginStateLoading value)  loading,required TResult Function( LoginStateSuccess value)  success,required TResult Function( LoginStateLogoutSuccess value)  logoutSuccess,required TResult Function( LoginStateError value)  error,}){
 final _that = this;
 switch (_that) {
 case _Initial():
 return initial(_that);case LoginStateLoading():
-return hospitalsLoading(_that);case LoginStateError():
-return hospitalsError(_that);case _:
+return loading(_that);case LoginStateSuccess():
+return success(_that);case LoginStateLogoutSuccess():
+return logoutSuccess(_that);case LoginStateError():
+return error(_that);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -102,13 +106,15 @@ return hospitalsError(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _Initial value)?  initial,TResult? Function( LoginStateLoading value)?  hospitalsLoading,TResult? Function( LoginStateError value)?  hospitalsError,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _Initial value)?  initial,TResult? Function( LoginStateLoading value)?  loading,TResult? Function( LoginStateSuccess value)?  success,TResult? Function( LoginStateLogoutSuccess value)?  logoutSuccess,TResult? Function( LoginStateError value)?  error,}){
 final _that = this;
 switch (_that) {
 case _Initial() when initial != null:
-return initial(_that);case LoginStateLoading() when hospitalsLoading != null:
-return hospitalsLoading(_that);case LoginStateError() when hospitalsError != null:
-return hospitalsError(_that);case _:
+return initial(_that);case LoginStateLoading() when loading != null:
+return loading(_that);case LoginStateSuccess() when success != null:
+return success(_that);case LoginStateLogoutSuccess() when logoutSuccess != null:
+return logoutSuccess(_that);case LoginStateError() when error != null:
+return error(_that);case _:
   return null;
 
 }
@@ -125,12 +131,14 @@ return hospitalsError(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function()?  hospitalsLoading,TResult Function( ErrorHandler errorHandler)?  hospitalsError,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function()?  loading,TResult Function( LoginResponse loginResponse)?  success,TResult Function()?  logoutSuccess,TResult Function( ErrorHandler errorHandler)?  error,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Initial() when initial != null:
-return initial();case LoginStateLoading() when hospitalsLoading != null:
-return hospitalsLoading();case LoginStateError() when hospitalsError != null:
-return hospitalsError(_that.errorHandler);case _:
+return initial();case LoginStateLoading() when loading != null:
+return loading();case LoginStateSuccess() when success != null:
+return success(_that.loginResponse);case LoginStateLogoutSuccess() when logoutSuccess != null:
+return logoutSuccess();case LoginStateError() when error != null:
+return error(_that.errorHandler);case _:
   return orElse();
 
 }
@@ -148,12 +156,14 @@ return hospitalsError(_that.errorHandler);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function()  hospitalsLoading,required TResult Function( ErrorHandler errorHandler)  hospitalsError,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function()  loading,required TResult Function( LoginResponse loginResponse)  success,required TResult Function()  logoutSuccess,required TResult Function( ErrorHandler errorHandler)  error,}) {final _that = this;
 switch (_that) {
 case _Initial():
 return initial();case LoginStateLoading():
-return hospitalsLoading();case LoginStateError():
-return hospitalsError(_that.errorHandler);case _:
+return loading();case LoginStateSuccess():
+return success(_that.loginResponse);case LoginStateLogoutSuccess():
+return logoutSuccess();case LoginStateError():
+return error(_that.errorHandler);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -170,12 +180,14 @@ return hospitalsError(_that.errorHandler);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function()?  hospitalsLoading,TResult? Function( ErrorHandler errorHandler)?  hospitalsError,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function()?  loading,TResult? Function( LoginResponse loginResponse)?  success,TResult? Function()?  logoutSuccess,TResult? Function( ErrorHandler errorHandler)?  error,}) {final _that = this;
 switch (_that) {
 case _Initial() when initial != null:
-return initial();case LoginStateLoading() when hospitalsLoading != null:
-return hospitalsLoading();case LoginStateError() when hospitalsError != null:
-return hospitalsError(_that.errorHandler);case _:
+return initial();case LoginStateLoading() when loading != null:
+return loading();case LoginStateSuccess() when success != null:
+return success(_that.loginResponse);case LoginStateLogoutSuccess() when logoutSuccess != null:
+return logoutSuccess();case LoginStateError() when error != null:
+return error(_that.errorHandler);case _:
   return null;
 
 }
@@ -238,7 +250,105 @@ int get hashCode => runtimeType.hashCode;
 
 @override
 String toString() {
-  return 'LoginState.hospitalsLoading()';
+  return 'LoginState.loading()';
+}
+
+
+}
+
+
+
+
+/// @nodoc
+
+
+class LoginStateSuccess implements LoginState {
+  const LoginStateSuccess(this.loginResponse);
+  
+
+ final  LoginResponse loginResponse;
+
+/// Create a copy of LoginState
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$LoginStateSuccessCopyWith<LoginStateSuccess> get copyWith => _$LoginStateSuccessCopyWithImpl<LoginStateSuccess>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is LoginStateSuccess&&(identical(other.loginResponse, loginResponse) || other.loginResponse == loginResponse));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,loginResponse);
+
+@override
+String toString() {
+  return 'LoginState.success(loginResponse: $loginResponse)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $LoginStateSuccessCopyWith<$Res> implements $LoginStateCopyWith<$Res> {
+  factory $LoginStateSuccessCopyWith(LoginStateSuccess value, $Res Function(LoginStateSuccess) _then) = _$LoginStateSuccessCopyWithImpl;
+@useResult
+$Res call({
+ LoginResponse loginResponse
+});
+
+
+
+
+}
+/// @nodoc
+class _$LoginStateSuccessCopyWithImpl<$Res>
+    implements $LoginStateSuccessCopyWith<$Res> {
+  _$LoginStateSuccessCopyWithImpl(this._self, this._then);
+
+  final LoginStateSuccess _self;
+  final $Res Function(LoginStateSuccess) _then;
+
+/// Create a copy of LoginState
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? loginResponse = null,}) {
+  return _then(LoginStateSuccess(
+null == loginResponse ? _self.loginResponse : loginResponse // ignore: cast_nullable_to_non_nullable
+as LoginResponse,
+  ));
+}
+
+
+}
+
+/// @nodoc
+
+
+class LoginStateLogoutSuccess implements LoginState {
+  const LoginStateLogoutSuccess();
+  
+
+
+
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is LoginStateLogoutSuccess);
+}
+
+
+@override
+int get hashCode => runtimeType.hashCode;
+
+@override
+String toString() {
+  return 'LoginState.logoutSuccess()';
 }
 
 
@@ -275,7 +385,7 @@ int get hashCode => Object.hash(runtimeType,errorHandler);
 
 @override
 String toString() {
-  return 'LoginState.hospitalsError(errorHandler: $errorHandler)';
+  return 'LoginState.error(errorHandler: $errorHandler)';
 }
 
 

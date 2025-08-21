@@ -1,4 +1,3 @@
-
 import 'package:blood_bank_donor/core/networking/api_result.dart';
 import 'package:blood_bank_donor/features/about/data/repo/donor_repo.dart';
 import 'package:blood_bank_donor/features/about/logic/donor_state.dart';
@@ -14,7 +13,8 @@ class DonorCubit extends Cubit<DonorState> {
     final result = await _donorRepo.getDonorData();
     result.when(
       success: (donor) => emit(DonorState.success(donor)),
-      failure: (errorHandler) => emit(DonorState.error(errorHandler)), // 👈 كده
+      failure: (errorHandler) =>
+          emit(DonorState.error(errorHandler.apiErrorModel)), // 👈 كده
     );
   }
 }

@@ -32,33 +32,6 @@ class _AboutScreenState extends State<AboutScreen> {
           "About",
           style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.bold),
         ),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.exit_to_app, size: 24.sp),
-            tooltip: 'Logout',
-            onPressed: () {
-              try {
-                Navigator.pushNamedAndRemoveUntil(
-                  context,
-                  Routes.initialRoute,
-                  (route) => false,
-                );
-              } catch (e, stackTrace) {
-                debugPrint('Error during logout: $e\n$stackTrace');
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text(
-                      'Failed to logout: $e',
-                      style: TextStyle(fontSize: 14.sp),
-                    ),
-                    backgroundColor: Colors.red,
-                    duration: const Duration(seconds: 2),
-                  ),
-                );
-              }
-            },
-          ),
-        ],
       ),
       body: SafeArea(
         child: SingleChildScrollView(

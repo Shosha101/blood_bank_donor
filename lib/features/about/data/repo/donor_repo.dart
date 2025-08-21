@@ -13,7 +13,7 @@ class DonorRepo {
       final donor = await _donorApiService.getDonorData();
       return ApiResult.success(donor);
     } catch (error) {
-      return ApiResult.failure(ErrorHandler.handle(error).apiErrorModel);
+      return ApiResult.failure(ErrorHandler.handle(error));
     }
   }
 }

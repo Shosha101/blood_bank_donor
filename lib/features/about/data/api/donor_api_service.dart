@@ -10,6 +10,6 @@ part 'donor_api_service.g.dart';
 abstract class DonorApiService {
   factory DonorApiService(Dio dio) = _DonorApiService;
 
-  @GET('donor/1')
+  @GET('donor')
   Future<DonorModel> getDonorData();
 }

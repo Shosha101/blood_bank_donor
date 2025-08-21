@@ -38,37 +38,7 @@ class _RequestsScreenState extends State<RequestsScreen> {
           "Hospital Requests",
           style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.bold),
         ),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.exit_to_app, size: 24.sp),
-            tooltip: 'Logout',
-            onPressed: _isLayoutReady
-                ? () {
-                    debugPrint('Logout button pressed');
-                    try {
-                      Navigator.pushNamedAndRemoveUntil(
-                        context,
-                        Routes.initialRoute,
-                        (route) => false,
-                      );
-                    } catch (e, stackTrace) {
-                      debugPrint('Error during logout: $e\n$stackTrace');
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text(
-                            'Failed to logout: $e',
-                            style: TextStyle(fontSize: 14.sp),
-                          ),
-                          backgroundColor: Colors.red,
-                          duration: const Duration(seconds: 2),
-                        ),
-                      );
-                    }
-                  }
-                : null,
           ),
-        ],
-      ),
       body: LayoutBuilder(
         builder: (context, constraints) {
           return Center(
@@ -93,7 +63,7 @@ class _RequestsScreenState extends State<RequestsScreen> {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
                           content: Text(
-                            error.message ?? 'Action failed',
+                            error.toString() ,
                             style: TextStyle(fontSize: 14.sp),
                           ),
                           backgroundColor: Colors.red,
@@ -269,7 +239,7 @@ class _RequestsScreenState extends State<RequestsScreen> {
                               Icon(Icons.error_outline, color: Colors.red, size: 48.sp),
                               SizedBox(height: 16.h),
                               Text(
-                                error.message ?? 'Unable to load requests',
+                                error.toString(),
                                 style: TextStyle(
                                   fontSize: 16.sp,
                                   color: Colors.red,

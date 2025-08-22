@@ -27,6 +27,8 @@ class _AboutScreenState extends State<AboutScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: Image(image: AssetImage('assets/images/safe_blood.png')),
+
         backgroundColor: Colors.white,
         title: Text(
           "About",

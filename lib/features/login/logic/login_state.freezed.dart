@@ -131,12 +131,12 @@ return error(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function()?  loading,TResult Function( LoginResponse loginResponse)?  success,TResult Function()?  logoutSuccess,TResult Function( ErrorHandler errorHandler)?  error,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function()?  loading,TResult Function( LoginResponse loginResponse,  String? phoneNumber)?  success,TResult Function()?  logoutSuccess,TResult Function( ErrorHandler errorHandler)?  error,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Initial() when initial != null:
 return initial();case LoginStateLoading() when loading != null:
 return loading();case LoginStateSuccess() when success != null:
-return success(_that.loginResponse);case LoginStateLogoutSuccess() when logoutSuccess != null:
+return success(_that.loginResponse,_that.phoneNumber);case LoginStateLogoutSuccess() when logoutSuccess != null:
 return logoutSuccess();case LoginStateError() when error != null:
 return error(_that.errorHandler);case _:
   return orElse();
@@ -156,12 +156,12 @@ return error(_that.errorHandler);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function()  loading,required TResult Function( LoginResponse loginResponse)  success,required TResult Function()  logoutSuccess,required TResult Function( ErrorHandler errorHandler)  error,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function()  loading,required TResult Function( LoginResponse loginResponse,  String? phoneNumber)  success,required TResult Function()  logoutSuccess,required TResult Function( ErrorHandler errorHandler)  error,}) {final _that = this;
 switch (_that) {
 case _Initial():
 return initial();case LoginStateLoading():
 return loading();case LoginStateSuccess():
-return success(_that.loginResponse);case LoginStateLogoutSuccess():
+return success(_that.loginResponse,_that.phoneNumber);case LoginStateLogoutSuccess():
 return logoutSuccess();case LoginStateError():
 return error(_that.errorHandler);case _:
   throw StateError('Unexpected subclass');
@@ -180,12 +180,12 @@ return error(_that.errorHandler);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function()?  loading,TResult? Function( LoginResponse loginResponse)?  success,TResult? Function()?  logoutSuccess,TResult? Function( ErrorHandler errorHandler)?  error,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function()?  loading,TResult? Function( LoginResponse loginResponse,  String? phoneNumber)?  success,TResult? Function()?  logoutSuccess,TResult? Function( ErrorHandler errorHandler)?  error,}) {final _that = this;
 switch (_that) {
 case _Initial() when initial != null:
 return initial();case LoginStateLoading() when loading != null:
 return loading();case LoginStateSuccess() when success != null:
-return success(_that.loginResponse);case LoginStateLogoutSuccess() when logoutSuccess != null:
+return success(_that.loginResponse,_that.phoneNumber);case LoginStateLogoutSuccess() when logoutSuccess != null:
 return logoutSuccess();case LoginStateError() when error != null:
 return error(_that.errorHandler);case _:
   return null;
@@ -263,10 +263,11 @@ String toString() {
 
 
 class LoginStateSuccess implements LoginState {
-  const LoginStateSuccess(this.loginResponse);
+  const LoginStateSuccess(this.loginResponse, {this.phoneNumber});
   
 
  final  LoginResponse loginResponse;
+ final  String? phoneNumber;
 
 /// Create a copy of LoginState
 /// with the given fields replaced by the non-null parameter values.
@@ -278,16 +279,16 @@ $LoginStateSuccessCopyWith<LoginStateSuccess> get copyWith => _$LoginStateSucces
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is LoginStateSuccess&&(identical(other.loginResponse, loginResponse) || other.loginResponse == loginResponse));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is LoginStateSuccess&&(identical(other.loginResponse, loginResponse) || other.loginResponse == loginResponse)&&(identical(other.phoneNumber, phoneNumber) || other.phoneNumber == phoneNumber));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,loginResponse);
+int get hashCode => Object.hash(runtimeType,loginResponse,phoneNumber);
 
 @override
 String toString() {
-  return 'LoginState.success(loginResponse: $loginResponse)';
+  return 'LoginState.success(loginResponse: $loginResponse, phoneNumber: $phoneNumber)';
 }
 
 
@@ -298,7 +299,7 @@ abstract mixin class $LoginStateSuccessCopyWith<$Res> implements $LoginStateCopy
   factory $LoginStateSuccessCopyWith(LoginStateSuccess value, $Res Function(LoginStateSuccess) _then) = _$LoginStateSuccessCopyWithImpl;
 @useResult
 $Res call({
- LoginResponse loginResponse
+ LoginResponse loginResponse, String? phoneNumber
 });
 
 
@@ -315,10 +316,11 @@ class _$LoginStateSuccessCopyWithImpl<$Res>
 
 /// Create a copy of LoginState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') $Res call({Object? loginResponse = null,}) {
+@pragma('vm:prefer-inline') $Res call({Object? loginResponse = null,Object? phoneNumber = freezed,}) {
   return _then(LoginStateSuccess(
 null == loginResponse ? _self.loginResponse : loginResponse // ignore: cast_nullable_to_non_nullable
-as LoginResponse,
+as LoginResponse,phoneNumber: freezed == phoneNumber ? _self.phoneNumber : phoneNumber // ignore: cast_nullable_to_non_nullable
+as String?,
   ));
 }
 

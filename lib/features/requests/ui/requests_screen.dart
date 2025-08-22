@@ -33,17 +33,22 @@ class _RequestsScreenState extends State<RequestsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: Image(image: AssetImage('assets/images/safe_blood.png')),
         backgroundColor: Colors.white,
         title: Text(
           "Hospital Requests",
           style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.bold),
         ),
-          ),
+      ),
       body: LayoutBuilder(
         builder: (context, constraints) {
           return Center(
             child: ConstrainedBox(
-              constraints: BoxConstraints(maxWidth: constraints.maxWidth > 800 ? 800 : constraints.maxWidth),
+              constraints: BoxConstraints(
+                maxWidth: constraints.maxWidth > 800
+                    ? 800
+                    : constraints.maxWidth,
+              ),
               child: BlocListener<RequestsCubit, RequestsState>(
                 listener: (context, state) {
                   state.whenOrNull(
@@ -63,7 +68,7 @@ class _RequestsScreenState extends State<RequestsScreen> {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
                           content: Text(
-                            error.toString() ,
+                            error.toString(),
                             style: TextStyle(fontSize: 14.sp),
                           ),
                           backgroundColor: Colors.red,
@@ -79,17 +84,22 @@ class _RequestsScreenState extends State<RequestsScreen> {
                     return state.when(
                       initial: () => Center(
                         child: CircularProgressIndicator(
-                          valueColor: AlwaysStoppedAnimation<Color>(Colors.redAccent),
+                          valueColor: AlwaysStoppedAnimation<Color>(
+                            Colors.redAccent,
+                          ),
                         ),
                       ),
                       loading: () => Center(
                         child: CircularProgressIndicator(
-                          valueColor: AlwaysStoppedAnimation<Color>(Colors.redAccent),
+                          valueColor: AlwaysStoppedAnimation<Color>(
+                            Colors.redAccent,
+                          ),
                         ),
                       ),
                       success: (requests) => RefreshIndicator(
                         onRefresh: () async {
-                          if (_isLayoutReady && !context.read<RequestsCubit>().isClosed) {
+                          if (_isLayoutReady &&
+                              !context.read<RequestsCubit>().isClosed) {
                             context.read<RequestsCubit>().getDonationRequests();
                           }
                         },
@@ -97,25 +107,38 @@ class _RequestsScreenState extends State<RequestsScreen> {
                             ? Center(
                                 child: Text(
                                   'No donation requests available',
-                                  style: TextStyle(fontSize: 16.sp, color: Colors.grey),
+                                  style: TextStyle(
+                                    fontSize: 16.sp,
+                                    color: Colors.grey,
+                                  ),
                                 ),
                               )
                             : ListView.builder(
-                                padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: 12.w,
+                                  vertical: 8.h,
+                                ),
                                 itemCount: requests.length,
                                 itemBuilder: (context, index) {
                                   try {
                                     final request = requests[index];
                                     return Card(
                                       shape: RoundedRectangleBorder(
-                                        side: const BorderSide(color: Colors.grey),
-                                        borderRadius: BorderRadius.circular(8.r),
+                                        side: const BorderSide(
+                                          color: Colors.grey,
+                                        ),
+                                        borderRadius: BorderRadius.circular(
+                                          8.r,
+                                        ),
                                       ),
-                                      margin: EdgeInsets.symmetric(vertical: 8.h),
+                                      margin: EdgeInsets.symmetric(
+                                        vertical: 8.h,
+                                      ),
                                       child: Padding(
                                         padding: EdgeInsets.all(12.w),
                                         child: Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
                                           children: [
                                             Text(
                                               "Hospital: ${request.hospitalName}",
@@ -138,36 +161,60 @@ class _RequestsScreenState extends State<RequestsScreen> {
                                               style: TextStyle(fontSize: 14.sp),
                                             ),
                                             SizedBox(height: 10.h),
-                                            if (request.donorApprovalStatus == null)
+                                            if (request.donorApprovalStatus ==
+                                                null)
                                               LayoutBuilder(
                                                 builder: (context, constraints) {
-                                                  final buttonWidth = constraints.maxWidth > 600
+                                                  final buttonWidth =
+                                                      constraints.maxWidth > 600
                                                       ? 200.w
-                                                      : constraints.maxWidth / 2 - 10.w;
+                                                      : constraints.maxWidth /
+                                                                2 -
+                                                            10.w;
                                                   return Row(
                                                     children: [
                                                       SizedBox(
                                                         width: buttonWidth,
                                                         child: ElevatedButton(
-                                                          onPressed: _isLayoutReady
+                                                          onPressed:
+                                                              _isLayoutReady
                                                               ? () {
-                                                                  if (!context.read<RequestsCubit>().isClosed) {
+                                                                  if (!context
+                                                                      .read<
+                                                                        RequestsCubit
+                                                                      >()
+                                                                      .isClosed) {
                                                                     context
-                                                                        .read<RequestsCubit>()
+                                                                        .read<
+                                                                          RequestsCubit
+                                                                        >()
                                                                         .approveDonationRequest(
-                                                                          request.donorDonationRequestId,
+                                                                          request
+                                                                              .donorDonationRequestId,
                                                                         );
                                                                   }
                                                                 }
                                                               : null,
                                                           style: ElevatedButton.styleFrom(
-                                                            backgroundColor: Colors.green,
-                                                            padding: EdgeInsets.symmetric(vertical: 10.h),
-                                                            textStyle: TextStyle(fontSize: 14.sp),
+                                                            backgroundColor:
+                                                                Colors.green,
+                                                            padding:
+                                                                EdgeInsets.symmetric(
+                                                                  vertical:
+                                                                      10.h,
+                                                                ),
+                                                            textStyle:
+                                                                TextStyle(
+                                                                  fontSize:
+                                                                      14.sp,
+                                                                ),
                                                           ),
                                                           child: const Text(
                                                             "Accept",
-                                                            style: TextStyle(color: Colors.white),
+                                                            style: TextStyle(
+                                                              color:
+                                                                  Colors.white,
+                                                            ),
                                                           ),
                                                         ),
                                                       ),
@@ -175,25 +222,45 @@ class _RequestsScreenState extends State<RequestsScreen> {
                                                       SizedBox(
                                                         width: buttonWidth,
                                                         child: ElevatedButton(
-                                                          onPressed: _isLayoutReady
+                                                          onPressed:
+                                                              _isLayoutReady
                                                               ? () {
-                                                                  if (!context.read<RequestsCubit>().isClosed) {
+                                                                  if (!context
+                                                                      .read<
+                                                                        RequestsCubit
+                                                                      >()
+                                                                      .isClosed) {
                                                                     context
-                                                                        .read<RequestsCubit>()
+                                                                        .read<
+                                                                          RequestsCubit
+                                                                        >()
                                                                         .rejectDonationRequest(
-                                                                          request.donorDonationRequestId,
+                                                                          request
+                                                                              .donorDonationRequestId,
                                                                         );
                                                                   }
                                                                 }
                                                               : null,
                                                           style: ElevatedButton.styleFrom(
-                                                            backgroundColor: Colors.red,
-                                                            padding: EdgeInsets.symmetric(vertical: 10.h),
-                                                            textStyle: TextStyle(fontSize: 14.sp),
+                                                            backgroundColor:
+                                                                Colors.red,
+                                                            padding:
+                                                                EdgeInsets.symmetric(
+                                                                  vertical:
+                                                                      10.h,
+                                                                ),
+                                                            textStyle:
+                                                                TextStyle(
+                                                                  fontSize:
+                                                                      14.sp,
+                                                                ),
                                                           ),
                                                           child: const Text(
                                                             "Reject",
-                                                            style: TextStyle(color: Colors.white),
+                                                            style: TextStyle(
+                                                              color:
+                                                                  Colors.white,
+                                                            ),
                                                           ),
                                                         ),
                                                       ),
@@ -201,7 +268,8 @@ class _RequestsScreenState extends State<RequestsScreen> {
                                                   );
                                                 },
                                               ),
-                                            if (request.donorApprovalStatus == true)
+                                            if (request.donorApprovalStatus ==
+                                                true)
                                               Text(
                                                 "Status: Accepted",
                                                 style: TextStyle(
@@ -210,7 +278,8 @@ class _RequestsScreenState extends State<RequestsScreen> {
                                                   fontWeight: FontWeight.w500,
                                                 ),
                                               ),
-                                            if (request.donorApprovalStatus == false)
+                                            if (request.donorApprovalStatus ==
+                                                false)
                                               Text(
                                                 "Status: Rejected",
                                                 style: TextStyle(
@@ -224,7 +293,9 @@ class _RequestsScreenState extends State<RequestsScreen> {
                                       ),
                                     );
                                   } catch (e, stackTrace) {
-                                    debugPrint('Error rendering request at index $index: $e\n$stackTrace');
+                                    debugPrint(
+                                      'Error rendering request at index $index: $e\n$stackTrace',
+                                    );
                                     return const SizedBox.shrink();
                                   }
                                 },
@@ -236,7 +307,11 @@ class _RequestsScreenState extends State<RequestsScreen> {
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Icon(Icons.error_outline, color: Colors.red, size: 48.sp),
+                              Icon(
+                                Icons.error_outline,
+                                color: Colors.red,
+                                size: 48.sp,
+                              ),
                               SizedBox(height: 16.h),
                               Text(
                                 error.toString(),
@@ -251,13 +326,20 @@ class _RequestsScreenState extends State<RequestsScreen> {
                               ElevatedButton(
                                 onPressed: _isLayoutReady
                                     ? () {
-                                        if (!context.read<RequestsCubit>().isClosed) {
-                                          context.read<RequestsCubit>().getDonationRequests();
+                                        if (!context
+                                            .read<RequestsCubit>()
+                                            .isClosed) {
+                                          context
+                                              .read<RequestsCubit>()
+                                              .getDonationRequests();
                                         }
                                       }
                                     : null,
                                 style: ElevatedButton.styleFrom(
-                                  padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 12.h),
+                                  padding: EdgeInsets.symmetric(
+                                    horizontal: 24.w,
+                                    vertical: 12.h,
+                                  ),
                                   textStyle: TextStyle(fontSize: 14.sp),
                                   backgroundColor: Colors.redAccent,
                                   foregroundColor: Colors.white,

@@ -1,5 +1,6 @@
 import 'package:blood_bank_donor/core/di/dependency_injection.dart';
 import 'package:blood_bank_donor/core/extension/navigation_extension.dart';
+import 'package:blood_bank_donor/core/helpers/shared_preference.dart';
 import 'package:blood_bank_donor/core/routing/routes.dart';
 import 'package:blood_bank_donor/features/about/logic/donor_cubit.dart';
 import 'package:blood_bank_donor/features/about/ui/about_screen.dart';
@@ -21,6 +22,26 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   int _selectedIndex = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _restoreSelectedIndex();
+  }
+
+  Future<void> _restoreSelectedIndex() async {
+    final selectedIndex = await SharedPrefHelper.getSecuredInt(SharedPrefKeys.selectedIndex);
+    if (mounted && selectedIndex != null && selectedIndex >= 0 && selectedIndex < 2) {
+      setState(() {
+        _selectedIndex = selectedIndex;
+      });
+    }
+  }
+
+  Future<void> _saveSelectedIndex(int index) async {
+    await SharedPrefHelper.setSecuredInt(SharedPrefKeys.selectedIndex, index);
+    debugPrint('Stored selectedIndex: $index');
+  }
 
   void _onItemTapped(BuildContext context, int index) {
     if (index == 2) {
@@ -48,6 +69,7 @@ class _MainScreenState extends State<MainScreen> {
     } else {
       setState(() {
         _selectedIndex = index;
+        _saveSelectedIndex(index);
       });
     }
   }

@@ -46,10 +46,12 @@ class LoginResponse {
   LoginResponse copyWith({
     String? message,
     int? userId,
+    String? token,
   }) {
     return LoginResponse(
       message: message ?? this.message,
       userId: userId ?? this.userId,
+      token: token ?? this.token,
     );
   }
 }

@@ -17,16 +17,14 @@ class DonorApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
-      providers: [
-        BlocProvider.value(value: GetIt.I<LoginCubit>()),
-      ],
+      providers: [BlocProvider.value(value: GetIt.I<LoginCubit>())],
       child: LayoutBuilder(
         builder: (context, constraints) {
           final width = constraints.maxWidth;
           Size designSize;
-          if (width < 600) {
+          if (width < 390) {
             designSize = const Size(390, 844); // Mobile
-          } else if (width < 900) {
+          } else if (width < 600) {
             designSize = const Size(768, 1024); // Tablet
           } else {
             designSize = const Size(1280, 800); // Web
@@ -42,31 +40,40 @@ class DonorApp extends StatelessWidget {
                 theme: ThemeData(
                   primaryColor: Colors.redAccent,
                   scaffoldBackgroundColor: Colors.white,
-                  textTheme: TextTheme(
-                    bodyMedium: TextStyle(fontSize: 16.sp),
-                  ),
+                  textTheme: TextTheme(bodyMedium: TextStyle(fontSize: 16.sp)),
                 ),
                 debugShowCheckedModeBanner: false,
                 home: FutureBuilder<Map<String, String?>>(
-                  future: Future.wait([
-                    SharedPrefHelper.getSecuredString('currentRoute'),
-                    SharedPrefHelper.getSecuredString(SharedPrefKeys.phoneNumber),
-                  ]).then((values) => {
-                        'currentRoute': values[0],
-                        'phoneNumber': values[1],
-                      }),
+                  future:
+                      Future.wait([
+                        SharedPrefHelper.getSecuredString('currentRoute'),
+                        SharedPrefHelper.getSecuredString(
+                          SharedPrefKeys.phoneNumber,
+                        ),
+                      ]).then(
+                        (values) => {
+                          'currentRoute': values[0],
+                          'phoneNumber': values[1],
+                        },
+                      ),
                   builder: (context, snapshot) {
                     return BlocBuilder<LoginCubit, LoginState>(
                       builder: (context, state) {
                         if (state is LoginStateSuccess) {
-                          final phoneNumber = state.phoneNumber ?? snapshot.data?['phoneNumber'] ?? 'unknown';
-                          final route = snapshot.data?['currentRoute'] ?? Routes.mainScreen;
+                          final phoneNumber =
+                              state.phoneNumber ??
+                              snapshot.data?['phoneNumber'] ??
+                              'unknown';
+                          final route =
+                              snapshot.data?['currentRoute'] ??
+                              Routes.mainScreen;
                           return Navigator(
                             initialRoute: route,
                             onGenerateRoute: (settings) {
                               if (settings.name == Routes.mainScreen) {
                                 return MaterialPageRoute(
-                                  builder: (context) => MainScreen(phoneNumber: phoneNumber),
+                                  builder: (context) =>
+                                      MainScreen(phoneNumber: phoneNumber),
                                   settings: settings,
                                 );
                               }
@@ -74,7 +81,9 @@ class DonorApp extends StatelessWidget {
                             },
                           );
                         } else if (state is LoginStateLoading) {
-                          return const Center(child: CircularProgressIndicator());
+                          return const Center(
+                            child: CircularProgressIndicator(),
+                          );
                         } else {
                           return LoginScreen(
                             onLogin: (context, phone) {

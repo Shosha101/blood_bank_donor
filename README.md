@@ -1,16 +1,38 @@
-# blood_bank_donor
+# Blood Bank — Donor App
 
-A new Flutter project.
+The **donor-facing app** of a two-app blood bank platform built with **Flutter**. Donors log in, browse blood donation requests, and respond to hospitals in need.
+
+> 🏥 Companion app: [blood_bank_hospital](https://github.com/Shosha101/blood_bank_hospital) — the hospital-side dashboard.
+
+## Features
+
+- 🔐 **Login** with secure token storage (`flutter_secure_storage`)
+- 🩸 **Donation requests** — browse and respond to active blood requests
+- 👤 **Donor profile / about**
+- 🌍 Localization-ready (`easy_localization`), responsive with side-menu layout for wide screens
+
+## Architecture
+
+Clean, feature-first structure with a fully typed networking layer:
+
+- **Retrofit + Dio** code-generated API services, cookie-based session handling
+- **`ApiResult` / error model with freezed** — every call returns a typed success/failure
+- **Cubit (flutter_bloc)** state management with freezed states
+- **get_it** dependency injection, centralized routing, shared theming
+
+```
+lib/
+├── core/        # networking (dio factory, error handling), di, routing, theming
+└── features/
+    ├── login/
+    ├── requests/
+    └── about/
+```
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+```bash
+flutter pub get
+dart run build_runner build --delete-conflicting-outputs
+flutter run
+```

@@ -7,9 +7,17 @@ The **donor-facing app** of a two-app blood bank platform built with **Flutter**
 ## Features
 
 - 🔐 **Login** with secure token storage (`flutter_secure_storage`)
-- 🩸 **Donation requests** — browse and respond to active blood requests
-- 👤 **Donor profile / about**
-- 🌍 Localization-ready (`easy_localization`), responsive with side-menu layout for wide screens
+- 🩸 **Donation requests** — browse, filter (waiting / accepted / declined) and respond to blood requests
+- 👤 **Donor profile** — blood type, points and personal details, with a logout confirmation sheet
+- 🌍 **Arabic (RTL) and English** (`easy_localization`), switchable from every screen
+
+## Screenshots
+
+| Arabic | English |
+|---|---|
+| ![Arabic screens](docs/screenshots/arabic.jpg) | ![English screens](docs/screenshots/english.jpg) |
+
+Rendered from the real screens with sample data by `tool/screens_golden_test.dart`.
 
 ## Architecture
 

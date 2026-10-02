@@ -2,12 +2,14 @@ import 'package:blood_bank_donor/core/di/dependency_injection.dart';
 import 'package:blood_bank_donor/core/extension/navigation_extension.dart';
 import 'package:blood_bank_donor/core/helpers/shared_preference.dart';
 import 'package:blood_bank_donor/core/routing/routes.dart';
+import 'package:blood_bank_donor/core/theming/app_theme.dart';
 import 'package:blood_bank_donor/features/about/logic/donor_cubit.dart';
 import 'package:blood_bank_donor/features/about/ui/about_screen.dart';
 import 'package:blood_bank_donor/features/login/logic/login_cubit.dart';
 import 'package:blood_bank_donor/features/login/logic/login_state.dart';
 import 'package:blood_bank_donor/features/requests/logic/requests_cubit.dart';
 import 'package:blood_bank_donor/features/requests/ui/requests_screen.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -30,8 +32,13 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   Future<void> _restoreSelectedIndex() async {
-    final selectedIndex = await SharedPrefHelper.getSecuredInt(SharedPrefKeys.selectedIndex);
-    if (mounted && selectedIndex != null && selectedIndex >= 0 && selectedIndex < 2) {
+    final selectedIndex = await SharedPrefHelper.getSecuredInt(
+      SharedPrefKeys.selectedIndex,
+    );
+    if (mounted &&
+        selectedIndex != null &&
+        selectedIndex >= 0 &&
+        selectedIndex < 2) {
       setState(() {
         _selectedIndex = selectedIndex;
       });
@@ -43,43 +50,16 @@ class _MainScreenState extends State<MainScreen> {
     debugPrint('Stored selectedIndex: $index');
   }
 
-  void _onItemTapped(BuildContext context, int index) {
-    if (index == 2) {
-      // Logout item
-      showDialog(
-        context: context,
-        builder: (dialogContext) => AlertDialog(
-          title: const Text('Confirm Logout'),
-          content: const Text('Are you sure you want to log out?'),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(dialogContext),
-              child: const Text('Cancel'),
-            ),
-            TextButton(
-              onPressed: () {
-                Navigator.pop(dialogContext);
-                context.read<LoginCubit>().logout();
-              },
-              child: const Text('Logout', style: TextStyle(color: Colors.red)),
-            ),
-          ],
-        ),
-      );
-    } else {
-      setState(() {
-        _selectedIndex = index;
-        _saveSelectedIndex(index);
-      });
-    }
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+      _saveSelectedIndex(index);
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    final screens = [
-      const RequestsScreen(),
-      const AboutScreen(),
-    ];
+    final screens = [const RequestsScreen(), const AboutScreen()];
 
     return MultiBlocProvider(
       providers: [
@@ -94,16 +74,19 @@ class _MainScreenState extends State<MainScreen> {
               debugPrint('Logout successful, navigating to LoginScreen');
               providerContext.pushReplacementNamed(Routes.initialRoute);
             } else if (state is LoginStateError) {
-              debugPrint('Logout error: ${state.errorHandler.apiErrorModel.message}');
+              debugPrint(
+                'Logout error: ${state.errorHandler.apiErrorModel.message}',
+              );
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
                   content: Text(
-                    state.errorHandler.apiErrorModel.message ?? 'Logout failed. Please try again.',
+                    state.errorHandler.apiErrorModel.message ??
+                        context.tr('logout_failed'),
                   ),
-                  backgroundColor: Colors.red,
+                  backgroundColor: AppColors.primaryDark,
                   duration: const Duration(seconds: 3),
                   action: SnackBarAction(
-                    label: 'Retry',
+                    label: context.tr('retry'),
                     textColor: Colors.white,
                     onPressed: () => context.read<LoginCubit>().logout(),
                   ),
@@ -111,34 +94,35 @@ class _MainScreenState extends State<MainScreen> {
               );
             } else if (state is LoginStateLoading) {
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('Logging out...'),
-                  duration: Duration(seconds: 1),
+                SnackBar(
+                  content: Text(context.tr('logging_out')),
+                  duration: const Duration(seconds: 1),
                 ),
               );
             }
           },
           child: Scaffold(
             body: screens[_selectedIndex],
-            bottomNavigationBar: BottomNavigationBar(
-              items: const [
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.request_page),
-                  label: 'Requests',
-                ),
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.person),
-                  label: 'Profile',
-                ),
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.logout),
-                  label: 'Logout',
-                ),
-              ],
-              currentIndex: _selectedIndex,
-              selectedItemColor: Colors.redAccent,
-              unselectedItemColor: Colors.grey,
-              onTap: (index) => _onItemTapped(providerContext, index),
+            bottomNavigationBar: DecoratedBox(
+              decoration: const BoxDecoration(
+                border: Border(top: BorderSide(color: AppColors.border)),
+              ),
+              child: NavigationBar(
+                selectedIndex: _selectedIndex,
+                onDestinationSelected: _onItemTapped,
+                destinations: [
+                  NavigationDestination(
+                    icon: const Icon(Icons.volunteer_activism_outlined),
+                    selectedIcon: const Icon(Icons.volunteer_activism),
+                    label: context.tr('nav_requests'),
+                  ),
+                  NavigationDestination(
+                    icon: const Icon(Icons.person_outline),
+                    selectedIcon: const Icon(Icons.person),
+                    label: context.tr('nav_profile'),
+                  ),
+                ],
+              ),
             ),
           ),
         ),

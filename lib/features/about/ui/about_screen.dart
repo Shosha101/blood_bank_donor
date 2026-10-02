@@ -1,9 +1,12 @@
-import 'package:blood_bank_donor/core/routing/routes.dart';
+import 'package:blood_bank_donor/core/theming/app_theme.dart';
+import 'package:blood_bank_donor/core/widgets/app_widgets.dart';
+import 'package:blood_bank_donor/features/about/data/model/donor_model.dart';
 import 'package:blood_bank_donor/features/about/logic/donor_cubit.dart';
 import 'package:blood_bank_donor/features/about/logic/donor_state.dart';
+import 'package:blood_bank_donor/features/login/ui/logout_sheet.dart';
+import 'package:easy_localization/easy_localization.dart' hide TextDirection;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class AboutScreen extends StatefulWidget {
   const AboutScreen({super.key});
@@ -23,279 +26,378 @@ class _AboutScreenState extends State<AboutScreen> {
     });
   }
 
+  void _reload() {
+    if (!context.read<DonorCubit>().isClosed) {
+      context.read<DonorCubit>().getDonorData();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    // Determine screen size category
-    final screenWidth = MediaQuery.of(context).size.width;
-    final isMobile = screenWidth < 400;
-    final isTablet = screenWidth >= 400 && screenWidth < 600;
-
-    // Responsive sizes
-    final avatarRadius = isMobile
-        ? 40.r
-        : isTablet
-        ? 45.r
-        : 50.r;
-    final padding = isMobile
-        ? 8.w
-        : isTablet
-        ? 12.w
-        : 16.w;
-    final cardHorizontalPadding = isMobile
-        ? 20.w
-        : isTablet
-        ? 50.w
-        : 100.w;
-    final titleFontSize = isMobile
-        ? 18.sp
-        : isTablet
-        ? 19.sp
-        : 20.sp;
-    final labelFontSize = isMobile
-        ? 14.sp
-        : isTablet
-        ? 15.sp
-        : 16.sp;
-    final valueFontSize = isMobile
-        ? 12.sp
-        : isTablet
-        ? 14.sp
-        : 16.sp;
-    final iconSize = isMobile
-        ? 20.sp
-        : isTablet
-        ? 22.sp
-        : 24.sp;
-    final buttonFontSize = isMobile
-        ? 12.sp
-        : isTablet
-        ? 13.sp
-        : 14.sp;
-
     return Scaffold(
-      appBar: AppBar(
-        leading: Image(image: AssetImage('assets/images/safe_blood.png')),
-        backgroundColor: Colors.white,
-        title: Text(
-          "About",
-          style: TextStyle(
-            fontSize: titleFontSize,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-      ),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          padding: EdgeInsets.all(padding),
-          child: BlocListener<DonorCubit, DonorState>(
-            listener: (context, state) {
-              state.whenOrNull(
-                error: (error) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(
-                        error.message ?? 'Failed to load donor data',
-                        style: TextStyle(fontSize: labelFontSize),
-                      ),
-                      backgroundColor: Colors.red,
-                      duration: const Duration(seconds: 2),
+      appBar: AppTopBar(title: context.tr('profile_title')),
+      body: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 640),
+          child: BlocBuilder<DonorCubit, DonorState>(
+            buildWhen: (previous, current) => previous != current,
+            builder: (context, state) {
+              return state.when(
+                initial: () => const Center(child: CircularProgressIndicator()),
+                loading: () => const Center(child: CircularProgressIndicator()),
+                success: (donor) => _ProfileBody(donor: donor),
+                error: (error) => Center(
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        StateMessage(
+                          icon: Icons.cloud_off_outlined,
+                          title: context.tr('profile_error'),
+                          body: error.message,
+                          actionLabel: context.tr('retry'),
+                          onAction: _reload,
+                        ),
+                        // Logging out must stay reachable when the profile fails to load.
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 32),
+                          child: _LogoutButton(
+                            onPressed: () => showLogoutSheet(context),
+                          ),
+                        ),
+                      ],
                     ),
-                  );
-                },
+                  ),
+                ),
               );
             },
-            child: BlocBuilder<DonorCubit, DonorState>(
-              buildWhen: (previous, current) => previous != current,
-              builder: (context, state) {
-                return state.when(
-                  initial: () => Center(
-                    child: CircularProgressIndicator(
-                      valueColor: AlwaysStoppedAnimation<Color>(
-                        Colors.redAccent,
-                      ),
-                    ),
-                  ),
-                  loading: () => Center(
-                    child: CircularProgressIndicator(
-                      valueColor: AlwaysStoppedAnimation<Color>(
-                        Colors.redAccent,
-                      ),
-                    ),
-                  ),
-                  success: (donor) => Column(
-                    children: [
-                      CircleAvatar(
-                        radius: avatarRadius,
-                        backgroundImage: const AssetImage(
-                          "assets/images/safe_blood.png",
-                        ),
-                      ),
-                      SizedBox(height: isMobile ? 8.h : 12.h),
-                      Text(
-                        donor.name,
-                        style: TextStyle(
-                          fontSize: titleFontSize,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      SizedBox(height: isMobile ? 12.h : 20.h),
-                      Padding(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: cardHorizontalPadding,
-                        ),
-                        child: Card(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8.r),
-                          ),
-                          elevation: 4,
-                          child: Padding(
-                            padding: EdgeInsets.all(padding),
-                            child: Column(
-                              children: [
-                                buildDetailRow(
-                                  Icons.phone,
-                                  "Phone",
-                                  donor.phoneNumber,
-                                  iconSize,
-                                  labelFontSize,
-                                  valueFontSize,
-                                ),
-                                buildDetailRow(
-                                  Icons.credit_card,
-                                  "SSN",
-                                  donor.ssn,
-                                  iconSize,
-                                  labelFontSize,
-                                  valueFontSize,
-                                ),
-                                buildDetailRow(
-                                  Icons.cake,
-                                  "Date of Birth",
-                                  donor.dateOfBirth.substring(0, 10),
-                                  iconSize,
-                                  labelFontSize,
-                                  valueFontSize,
-                                ),
-                                buildDetailRow(
-                                  Icons.person,
-                                  "Gender",
-                                  donor.gender,
-                                  iconSize,
-                                  labelFontSize,
-                                  valueFontSize,
-                                ),
-                                buildDetailRow(
-                                  Icons.bloodtype,
-                                  "Blood Type",
-                                  donor.bloodTypeName,
-                                  iconSize,
-                                  labelFontSize,
-                                  valueFontSize,
-                                ),
-                                buildDetailRow(
-                                  Icons.location_on,
-                                  "Area",
-                                  donor.areaName,
-                                  iconSize,
-                                  labelFontSize,
-                                  valueFontSize,
-                                ),
-                                buildDetailRow(
-                                  Icons.star,
-                                  "Points",
-                                  donor.totalPoints.toString(),
-                                  iconSize,
-                                  labelFontSize,
-                                  valueFontSize,
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  error: (error) => Center(
-                    child: Padding(
-                      padding: EdgeInsets.symmetric(horizontal: padding),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            Icons.error_outline,
-                            color: Colors.red,
-                            size: isMobile
-                                ? 40.sp
-                                : isTablet
-                                ? 44.sp
-                                : 48.sp,
-                          ),
-                          SizedBox(height: isMobile ? 12.h : 16.h),
-                          Text(
-                            error.message ?? 'Unable to load donor data',
-                            style: TextStyle(
-                              fontSize: labelFontSize,
-                              color: Colors.red,
-                              fontWeight: FontWeight.w500,
-                            ),
-                            textAlign: TextAlign.center,
-                          ),
-                          SizedBox(height: isMobile ? 12.h : 16.h),
-                          ElevatedButton(
-                            onPressed: () {
-                              if (!context.read<DonorCubit>().isClosed) {
-                                context.read<DonorCubit>().getDonorData();
-                              }
-                            },
-                            style: ElevatedButton.styleFrom(
-                              padding: EdgeInsets.symmetric(
-                                horizontal: isMobile ? 16.w : 24.w,
-                                vertical: isMobile ? 8.h : 12.h,
-                              ),
-                              textStyle: TextStyle(fontSize: buttonFontSize),
-                              backgroundColor: Colors.redAccent,
-                              foregroundColor: Colors.white,
-                            ),
-                            child: const Text('Retry'),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                );
-              },
-            ),
           ),
         ),
       ),
     );
   }
+}
 
-  Widget buildDetailRow(
-    IconData icon,
-    String label,
-    String value,
-    double iconSize,
-    double labelFontSize,
-    double valueFontSize,
-  ) {
+class _ProfileBody extends StatelessWidget {
+  final DonorModel donor;
+  const _ProfileBody({required this.donor});
+
+  String _genderLabel(BuildContext context, String gender) {
+    switch (gender.trim().toLowerCase()) {
+      case 'male':
+      case 'm':
+        return context.tr('gender_male');
+      case 'female':
+      case 'f':
+        return context.tr('gender_female');
+      default:
+        return gender;
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView(
+      padding: const EdgeInsets.fromLTRB(16, 20, 16, 24),
+      children: [
+        Center(
+          child: Container(
+            width: 88,
+            height: 88,
+            decoration: BoxDecoration(
+              color: AppColors.primarySoft,
+              shape: BoxShape.circle,
+              border: Border.all(color: AppColors.surface, width: 4),
+              boxShadow: [
+                BoxShadow(
+                  color: AppColors.primary.withValues(alpha: 0.15),
+                  blurRadius: 18,
+                  offset: const Offset(0, 6),
+                ),
+              ],
+            ),
+            child: const Icon(
+              Icons.person_rounded,
+              color: AppColors.primary,
+              size: 46,
+            ),
+          ),
+        ),
+        const SizedBox(height: 12),
+        Text(
+          donor.name,
+          textAlign: TextAlign.center,
+          style: const TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.w700,
+            color: AppColors.text,
+          ),
+        ),
+        const SizedBox(height: 2),
+        Text(
+          context.tr('donor_role'),
+          textAlign: TextAlign.center,
+          style: const TextStyle(fontSize: 13, color: AppColors.muted),
+        ),
+        const SizedBox(height: 18),
+        AppCard(
+          color: AppColors.primarySoft,
+          borderColor: AppColors.primarySoft,
+          padding: const EdgeInsets.all(12),
+          child: Row(
+            children: [
+              Expanded(
+                child: _HighlightTile(
+                  label: context.tr('blood_type'),
+                  child: Text(
+                    donor.bloodTypeName,
+                    textDirection: TextDirection.ltr,
+                    style: const TextStyle(
+                      fontSize: 30,
+                      fontWeight: FontWeight.w700,
+                      color: AppColors.primary,
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: _HighlightTile(
+                  label: context.tr('total_points'),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.baseline,
+                    textBaseline: TextBaseline.alphabetic,
+                    children: [
+                      Text(
+                        donor.totalPoints.toString(),
+                        style: const TextStyle(
+                          fontSize: 30,
+                          fontWeight: FontWeight.w700,
+                          color: AppColors.text,
+                        ),
+                      ),
+                      const SizedBox(width: 4),
+                      Text(
+                        context.tr('points_unit'),
+                        style: const TextStyle(
+                          fontSize: 13,
+                          color: AppColors.muted,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 22),
+        _SectionTitle(context.tr('donor_details')),
+        AppCard(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+          child: Column(
+            children: [
+              _DetailRow(
+                icon: Icons.badge_outlined,
+                label: context.tr('national_id'),
+                value: donor.ssn,
+                ltr: true,
+              ),
+              _DetailRow(
+                icon: Icons.cake_outlined,
+                label: context.tr('date_of_birth'),
+                value: formatApiDate(donor.dateOfBirth),
+                ltr: true,
+              ),
+              _DetailRow(
+                icon: Icons.person_outline,
+                label: context.tr('gender'),
+                value: _genderLabel(context, donor.gender),
+              ),
+              _DetailRow(
+                icon: Icons.location_on_outlined,
+                label: context.tr('area'),
+                value: donor.areaName,
+              ),
+              _DetailRow(
+                icon: Icons.phone_outlined,
+                label: context.tr('phone'),
+                value: donor.phoneNumber,
+                ltr: true,
+                last: true,
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 22),
+        _SectionTitle(context.tr('settings')),
+        AppCard(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+          child: Row(
+            children: [
+              const _IconTile(icon: Icons.translate),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      context.tr('language'),
+                      style: const TextStyle(
+                        fontSize: 12,
+                        color: AppColors.muted,
+                      ),
+                    ),
+                    Text(
+                      context.tr('language_name'),
+                      style: const TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w600,
+                        color: AppColors.text,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const LanguagePill(),
+            ],
+          ),
+        ),
+        const SizedBox(height: 22),
+        _LogoutButton(onPressed: () => showLogoutSheet(context)),
+      ],
+    );
+  }
+}
+
+class _HighlightTile extends StatelessWidget {
+  final String label;
+  final Widget child;
+  const _HighlightTile({required this.label, required this.child});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
+      decoration: BoxDecoration(
+        color: AppColors.surface,
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Column(
+        children: [
+          Text(
+            label,
+            style: const TextStyle(fontSize: 12, color: AppColors.muted),
+          ),
+          const SizedBox(height: 4),
+          child,
+        ],
+      ),
+    );
+  }
+}
+
+class _SectionTitle extends StatelessWidget {
+  final String text;
+  const _SectionTitle(this.text);
+
+  @override
+  Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: 8.h),
+      padding: const EdgeInsetsDirectional.only(start: 4, bottom: 10),
+      child: Text(
+        text,
+        style: const TextStyle(
+          fontSize: 15,
+          fontWeight: FontWeight.w700,
+          color: AppColors.text,
+        ),
+      ),
+    );
+  }
+}
+
+class _IconTile extends StatelessWidget {
+  final IconData icon;
+  const _IconTile({required this.icon});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 38,
+      height: 38,
+      decoration: BoxDecoration(
+        color: AppColors.primarySofter,
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Icon(icon, size: 19, color: AppColors.primary),
+    );
+  }
+}
+
+class _DetailRow extends StatelessWidget {
+  final IconData icon;
+  final String label;
+  final String value;
+  final bool ltr;
+  final bool last;
+
+  const _DetailRow({
+    required this.icon,
+    required this.label,
+    required this.value,
+    this.ltr = false,
+    this.last = false,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 12),
+      decoration: BoxDecoration(
+        border: last
+            ? null
+            : const Border(bottom: BorderSide(color: AppColors.border)),
+      ),
       child: Row(
         children: [
-          Icon(icon, color: Colors.redAccent, size: iconSize),
-          SizedBox(width: 10.w),
+          _IconTile(icon: icon),
+          const SizedBox(width: 12),
           Expanded(
             child: Text(
               label,
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: labelFontSize,
-              ),
+              style: const TextStyle(fontSize: 14, color: AppColors.muted),
             ),
           ),
-          Text(value, style: TextStyle(fontSize: valueFontSize)),
+          const SizedBox(width: 12),
+          Text(
+            value,
+            textDirection: ltr ? TextDirection.ltr : null,
+            style: const TextStyle(
+              fontSize: 15,
+              fontWeight: FontWeight.w600,
+              color: AppColors.text,
+            ),
+          ),
         ],
+      ),
+    );
+  }
+}
+
+class _LogoutButton extends StatelessWidget {
+  final VoidCallback onPressed;
+  const _LogoutButton({required this.onPressed});
+
+  @override
+  Widget build(BuildContext context) {
+    return OutlinedButton.icon(
+      onPressed: onPressed,
+      icon: const Icon(Icons.logout_rounded, size: 20),
+      label: Text(context.tr('logout')),
+      style: OutlinedButton.styleFrom(
+        backgroundColor: AppColors.primarySofter,
+        side: const BorderSide(color: AppColors.primarySoft),
       ),
     );
   }

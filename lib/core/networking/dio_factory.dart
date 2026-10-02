@@ -1,4 +1,5 @@
-import 'package:dio/browser.dart';
+import 'package:blood_bank_donor/core/networking/browser_credentials_stub.dart'
+    if (dart.library.js_interop) 'package:blood_bank_donor/core/networking/browser_credentials_web.dart';
 import 'package:dio/dio.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
@@ -36,11 +37,7 @@ class DioFactory {
           cookieJar = await _initializeCookieJar();
           tempDio.interceptors.add(CookieManager(cookieJar!));
         } else {
-          // For Flutter Web: cast to BrowserHttpClientAdapter
-          final adapter = tempDio.httpClientAdapter;
-          if (adapter is BrowserHttpClientAdapter) {
-            adapter.withCredentials = true; // تفعيل الكوكيز في الويب
-          }
+          enableBrowserCredentials(tempDio);
         }
 
         addDioInterceptor(tempDio);
